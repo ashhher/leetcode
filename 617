@@ -1,0 +1,107 @@
+Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
+
+You need to merge them into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of new tree.
+
+Example 1:
+
+Input: 
+	Tree 1                     Tree 2                  
+          1                         2                             
+         / \                       / \                            
+        3   2                     1   3                        
+       /                           \   \                      
+      5                             4   7                  
+Output: 
+Merged tree:
+	     3
+	    / \
+	   4   5
+	  / \   \ 
+	 5   4   7
+ 
+
+Note: The merging process must start from the root nodes of both trees.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+ //递归
+class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if(t1 == null) {
+            return t2;
+        }
+        if(t2 == null) {
+            return t1;
+        }
+        t1.val += t2.val;
+        t1.left = mergeTrees(t1.left,t2.left);
+        t1.right = mergeTrees(t1.right,t2.right);
+        return t1;
+    }
+}
+
+//迭代
+public class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {//称t1为主树，t2为副树，栈中一组数里主树的节点为主节点，反之为副节点
+        if (t1 == null)//t1（主树）为最后返回的树
+            return t2;
+        Stack < TreeNode[] > stack = new Stack < > ();//新建栈
+        stack.push(new TreeNode[] {t1, t2});//push根节点，此时t1肯定不为空
+        while (!stack.isEmpty()) {//栈不为空时
+            TreeNode[] t = stack.pop();//循环第一步为pop
+            if (t[0] == null || t[1] == null) {//【2】主副节点有一方为空时，跳过此次循环，即仅pop掉该组
+                                               //原因是：假设该情况出现在了【1】后，且当时的副节点左孩子为空，则该组数据为（n，0），那么对于主树来说不需要做出改变（n+=0）
+                                               //所以实际上，不会出现t[0] == null的情况，该句仅为代码的安全性
+                continue;
+            }
+            t[0].val += t[1].val;//此时主副节点都不为空，将两节点值相加赋值给主节点
+            if (t[0].left == null) {//若主节点左孩子为空
+                t[0].left = t[1].left;//则将副节点左孩子赋值给主节点左孩子
+            } else {//若主节点左孩子不为空
+                stack.push(new TreeNode[] {t[0].left, t[1].left});//【1】push这组进栈（此处未考虑副节点左孩子为空的情况，该情况在【2】处解决）
+                                                                  //如果考虑了，【2】处的代码可以删掉了？
+            }
+            if (t[0].right == null) {//同上
+                t[0].right = t[1].right;
+            } else {
+                stack.push(new TreeNode[] {t[0].right, t[1].right});
+            }
+        }
+        return t1;
+    }
+}
+
+//我的迭代
+public class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null)
+            return t2;
+        if (t2 == null)
+            return t1;
+        Stack < TreeNode[] > stack = new Stack < > ();
+        stack.push(new TreeNode[] {t1, t2});
+        while (!stack.isEmpty()) {
+            TreeNode[] t = stack.pop();
+            t[0].val += t[1].val;
+            if (t[0].left == null) {
+                t[0].left = t[1].left;
+            } else if(t[1].left != null){
+                stack.push(new TreeNode[] {t[0].left, t[1].left});
+            }
+            if (t[0].right == null) {
+                t[0].right = t[1].right;
+            } else if(t[1].right != null){
+                stack.push(new TreeNode[] {t[0].right, t[1].right});
+            }
+        }
+        return t1;
+    }
+}
