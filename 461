@@ -1,0 +1,79 @@
+The Hamming distance between two integers is the number of positions at which the corresponding bits are different.
+
+Given two integers x and y, calculate the Hamming distance.
+
+Note:
+0 ≤ x, y < 231.
+
+Example:
+
+Input: x = 1, y = 4
+
+Output: 2
+
+Explanation:
+1   (0 0 0 1)
+4   (0 1 0 0)
+       ↑   ↑
+
+
+将x，y按位异或得到i，将问题转化为求i的二进制位中1的个数count
+当i不为0时，将i与1按位与，判断二进制末尾是不是1，是，count++
+将i右位移一位
+重复第二，第三步，直到第二步条件不满足，，即i==0时终止统计， 即可得到i的二进制位中1的个数，问题得解
+
+& | ^ ~ 为位运算符
+<< >>为位移运算符 8»1=4 9«2=36
+
+//方法一，亦或后位移
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int i = x ^ y;
+        int count = 0;
+        while (i != 0) {
+            if ((i & 1) == 1) {
+                count++;
+            }
+            i = i >> 1;
+        }
+        return count;
+    }
+}
+
+//方法二，异或后n&(n-1)
+//n&(n-1)：将n的二进制表示中的最低位为1的改为0，eg：n = 10100(二进制），则(n-1) = 10011 ==》n&(n-1) = 10000
+//作用：1.判断一个数是否是2的方幂 n > 0 && ((n & (n - 1)) == 0 ) 2.求某一个数的二进制表示中1的个数，即此题
+class Solution
+{
+public:
+    int hammingDistance(int x, int y)
+    {
+        int n = x ^ y, count = 0;
+        while (n)
+        {
+            ++count;
+            n &= (n - 1);
+        }
+        return count;
+    }
+};
+
+//方法三
+int hammingDistance(int x, int y){
+    int tmp,res=0;
+    if(x<y){//此处使x为大数，y为小数
+        tmp=x;
+        x=y;
+        y=tmp;
+    }
+    while(y>0){//以y为标准
+        if(x%2!=y%2) res++;
+        x=x/2;
+        y=y/2;//注意此处为int，所以y=1时，y/2=0
+    }
+    while(x>0){//清算比y多出的为1的部分
+        if(x%2==1) res++;
+        x=x/2;
+    }
+    return res;
+}
