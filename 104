@@ -35,3 +35,26 @@ class Solution {
         return (left>right?left:right) + 1;
     }
 }
+
+//BFS广度优先（没加库
+public int maxDepth(TreeNode root) {
+    Queue<SimpleEntry<TreeNode, Integer>> bfs = new LinkedList<>();
+
+    if (root != null) {
+        bfs.add(new SimpleEntry<>(root, 1));
+    }
+
+    int depth = 0;
+
+    while (!bfs.isEmpty()) {
+        SimpleEntry<TreeNode, Integer> curr = bfs.poll();
+        root = curr.getKey();
+        if (root != null) {
+            int currDepth = curr.getValue();
+            depth = Math.max(currDepth, depth);
+            bfs.add(new SimpleEntry<TreeNode, Integer>(root.left, currDepth + 1));
+            bfs.add(new SimpleEntry<TreeNode, Integer>(root.right, currDepth + 1));
+        }
+    }
+    return depth;
+}
