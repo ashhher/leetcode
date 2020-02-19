@@ -1,0 +1,41 @@
+Reverse a singly linked list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL
+Output: 5->4->3->2->1->NULL
+
+/******************************************************************************************************/
+//两种解法都是我想不出来的 递归和迭代 仅当学习
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+
+//迭代
+class Solution {
+    public static ListNode reverseListIterative(ListNode head) {
+        ListNode prev = null; //前指针节点
+        ListNode curr = head; //当前指针节点
+        //每次循环，都将当前节点指向它前面的节点，然后当前节点和前节点后移
+        while (curr != null) {
+            ListNode nextTemp = curr.next; //临时节点，暂存当前节点的下一节点，用于后移
+            curr.next = prev; //将当前节点指向它前面的节点
+            prev = curr; //前指针后移
+            curr = nextTemp; //当前指针后移
+        }
+        return prev;
+    }
+}
+//递归
+public ListNode reverseList(ListNode head) {
+    if (head == null || head.next == null) return head;
+    ListNode p = reverseList(head.next);
+    head.next.next = head;
+    head.next = null;
+    return p;
+}
