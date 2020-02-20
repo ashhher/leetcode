@@ -1,0 +1,60 @@
+Given a non-empty array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+Example 1:
+
+Input: [2,2,1]
+Output: 1
+Example 2:
+
+Input: [4,1,2,1,2]
+Output: 4
+
+/******************************************************************************************************/
+//我的 其实是翻网页看到sort函数才想到的 而且返回的值是有点问题的 无法解决正负数问题
+import java.util.Arrays;  
+
+class Solution {
+    public int singleNumber(int[] nums) {
+        Arrays.sort(nums); 
+        int temp = 0;
+        for(int i = 0;i<nums.length;i++) {
+            if(i%2==0)
+                temp +=nums[i];
+            else if(i%2 == 1) 
+                temp -=nums[i];
+        }
+        return temp;
+    }
+}
+
+//在这个基础上又想了个 感觉好一些
+import java.util.Arrays;  
+
+class Solution {
+    public int singleNumber(int[] nums) {
+        Arrays.sort(nums); 
+        int temp = 0;
+        for(int i = 0;i<nums.length-1;i++) {
+            if(nums[i] == nums[i+1])
+                i++;
+            else
+                return nums[i];
+        }
+        return nums[nums.length-1];
+    }
+}
+
+//异或方法orz
+int ans = nums[0];
+if (nums.length > 1) {
+   for (int i = 1; i < nums.length; i++) {
+      ans = ans ^ nums[i];
+   }
+ }
+ return ans;
+
+//
