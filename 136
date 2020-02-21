@@ -57,4 +57,22 @@ if (nums.length > 1) {
  }
  return ans;
 
-//
+//哈希表
+class Solution {
+    public int singleNumber(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (Integer i : nums) {//foreach的用法，for(元素类型t 元素变量x : 遍历对象obj){引用了x的java语句;}
+                                //相当于for(int i =0;i<nums.length;i++){System.out.print(nums[i]+" ");}
+            Integer count = map.get(i);
+            count = count == null ? 1 : ++count;
+            map.put(i, count);
+        }
+        for (Integer i : map.keySet()) {
+            Integer count = map.get(i);
+            if (count == 1) {
+                return i;
+            }
+        }
+        return -1; // can't find it.
+    }
+}
