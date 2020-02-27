@@ -17,7 +17,7 @@ Output:
 class Solution {
     public List<Integer> findDisappearedNumbers(int[] nums) {
         HashMap<Integer, Boolean> hashTable = new HashMap<Integer, Boolean>();
-        for (num : nums) {
+        for (num : nums) {//这里有问题
             hashTable.put(num, true);
         }
         List<Integer> result = new LinkedList<Integer>();
