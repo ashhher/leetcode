@@ -1,0 +1,80 @@
+给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+
+示例 1:
+
+输入: 1->1->2
+输出: 1->2
+示例 2:
+
+输入: 1->1->2->3->3
+输出: 1->2->3
+
+/******************************************************************************************************/
+//第一次写的迭代 有点丑
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode head_ = head;
+        ListNode former = head;
+        while(head != null &&head.next != null) {
+            head = head.next;
+            while(former.val == head.val) {
+                if(head.next == null) {
+                    former.next = null;
+                    return head_;
+                }
+                head = head.next;
+            }
+            former.next = head;
+            former = head;
+        }
+        return head_;
+    }
+}
+//第二次写的递归 还是比较丑
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        return deleteDup(head, head.next);
+    }
+    private ListNode deleteDup(ListNode former, ListNode head) {
+        if(former == null || head == null)
+            return null;
+        if(former.val == head.val) {
+            former.next = head.next;
+            deleteDup(former,head.next);
+        }else {
+            deleteDup(head,head.next);
+        }
+        return former;
+    }
+}
+//cmd的递归
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head == null || head.next == null) {
+            return head;
+        }
+        if(head.val == head.next.val) {
+            head.next = head.next.next;
+            deleteDuplicates(head);
+        }else {
+            deleteDuplicates(head.next);
+        }
+        return head;
+    }
+}
+//大佬的
+public ListNode deleteDuplicates(ListNode head) {
+    if (head == null || head.next == null) return head;
+    head.next = deleteDuplicates(head.next);
+    return head.val == head.next.val ? head.next : head;
+}
