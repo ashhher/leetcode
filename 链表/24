@@ -1,0 +1,127 @@
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+ 
+示例:
+
+给定 1->2->3->4, 你应该返回 2->1->4->3.
+
+/******************************************************************************************************/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+ //一开始的写法 灭有考虑单数情况
+class Solution {
+    int flag = 1;
+    public ListNode swapPairs(ListNode head) {
+        if(head == null)
+            return head;
+        head.next = swapPairs(head.next);
+        flag = -flag;
+        if(flag > 0) {
+            ListNode head_ = head.next;
+            ListNode temp = head.next.next;
+            head.next.next = head;
+            head.next = temp;
+            return head_;
+        }
+        return head;
+    }
+}
+
+//最后ac的 稍微有点丑 最后发现其实不用flag
+class Solution {
+    int flag = -1;
+    public ListNode swapPairs(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        flag = -flag;//it is for judging if we have even or odd numbers
+                    //if we have odd numbers, we should not move the last element
+        head.next = swapPairs(head.next);
+        if(flag > 0) {//process elements only when flag==1
+            ListNode head_ = head.next;
+            ListNode temp = head.next.next;
+            head.next.next = head;
+            head.next = temp;
+            flag = -flag;
+            return head_;
+        }
+        flag = -flag;
+        return head;
+    }
+}
+/******************************************************************************************************/
+//cmd的 干净简介 甘拜下风
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if(head != null && head.next != null){
+            ListNode hn = head.next;
+            ListNode hnn = head.next.next;
+            head.next.next = head;
+            head.next = swapPairs(hnn);
+            return hn;
+        }
+        return head;
+    }
+}
+
+//答案的递归 感觉更容易理解一些
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+
+        // If the list has no node or has only one node left.
+        if ((head == null) || (head.next == null)) {
+            return head;
+        }
+
+        // Nodes to be swapped
+        ListNode firstNode = head;
+        ListNode secondNode = head.next;
+
+        // Swapping
+        firstNode.next  = swapPairs(secondNode.next);
+        secondNode.next = firstNode;
+
+        // Now the head is the second node
+        return secondNode;
+    }
+}
+
+//答案的迭代
+class Solution {
+    public ListNode swapPairs(ListNode head) {
+
+        // Dummy node acts as the prevNode for the head node
+        // of the list and hence stores pointer to the head node.
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+
+        ListNode prevNode = dummy;
+
+        while ((head != null) && (head.next != null)) {
+
+            // Nodes to be swapped
+            ListNode firstNode = head;
+            ListNode secondNode = head.next;
+
+            // Swapping
+            prevNode.next = secondNode;
+            firstNode.next = secondNode.next;
+            secondNode.next = firstNode;
+
+            // Reinitializing the head and prevNode for next swap
+            prevNode = firstNode;
+            head = firstNode.next; // jump
+        }
+
+        // Return the new head node.
+        return dummy.next;
+    }
+}
