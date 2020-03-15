@@ -76,7 +76,7 @@ class Solution {
             ListNode first = new ListNode(sum%10);
             first.next = second;
             second = first;
-        }while(!stack1.empty()||!stack2.empty()||plus == 1);//有最后这个plus == 1 下面那个if就能删了 看了别人的代码学到的
+        }while(!stack1.empty()||!stack2.empty()||plus == 1);//有最后这个plus == 1的话下面那个if就能删了 看了别人的代码学到的
         if(plus == 1) {//报错后加上的，最后可能还有一位没进
             ListNode first = new ListNode(1);
             first.next = second;
