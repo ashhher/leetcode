@@ -13,7 +13,7 @@ var uniquePathsIII = function (grid) {
     const row_num = grid.length,
         col_num = grid[0].length;
 
-    /* -------------- O(4^m*n) - DFS回溯 ------------ */
+    /* ============= O(4^m*n) - DFS回溯 ============= */
     let start_row = -1,
         start_column = -1,
         total = 1;
