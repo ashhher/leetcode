@@ -38,7 +38,7 @@ var subsetsWithDup = function (nums) {
     // res.unshift([]);
     // return res;
 
-    /* -------------- 回溯去重 ------------ */
+    /* ============= 回溯去重 ============= */
     let result = [];
     let path = [];
     nums = nums.sort();
