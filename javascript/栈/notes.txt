@@ -1,0 +1,29 @@
+单调栈
+单调栈是为了找寻数组中离 A[i] 最近的大于A[i],或小于A[i] 的 A[j] ,或 A[k] 的 ,其中 j<i ， k>i
+比如 [1,3,2],找寻 2 的左面第一个比较它小的数
+
+先说下 A[i] 左面最小值的情况，右面类似
+如果不用单调栈的话，需要从 2 开始向左一个一个的找。这样当每个数都需要这样查找的话，需要 O(n2) 时间
+单调栈是一次性把 A[i] 左面的 最小值求出并记录下来，用的时候可以直接用。时间 是 O(n)
+
+构造左栈，初始 stack=[],记录左面第一个最小值索引的数组 left=[]
+
+1. 数字 1， 栈为空，当前没有比 1小的数，比1小的数的索引记为 -1， left=[-1] ，1 直接入栈 stack=[1]
+2. 数字 3 , 栈不为空，3 大于 1，比3小的左面第一个数就是 1，索引是0 ，left=[-1,0] , 3 直接入栈 stack=[1,3]
+3. 数字 2， 栈不为空，2 大于 3，为了找比2小的数，把 3 弹出，比 1 大，left=[-1,0,0],2 入栈 stack=[1,2]
+构造右栈的时候，注意是从后向前构造，其它都一样。
+
+// 从左到右的单调栈
+for (let i = 0; i < len; i++) {
+    //这里的 A[stack[stack.length - 1]] >= A[i] 大于等于了，后面的就只能是大于了，不然会重复计算相等的值
+    while (stack.length !== 0 && A[stack[stack.length - 1]] >= A[i]) stack.pop();
+    if (stack.length) prev[i] = stack[stack.length - 1];
+    stack.push(i);
+}
+stack = [];
+// 从右到左的单调栈
+for (let i = len - 1; i >= 0; i--) {
+    while (stack.length !== 0 && A[stack[stack.length - 1]] > A[i]) stack.pop();
+    if (stack.length) next[i] = stack[stack.length - 1]
+    stack.push(i);
+}
